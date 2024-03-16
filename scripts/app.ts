@@ -38,7 +38,7 @@
     }
 
     /**
-     * Sets up event listener for navigation links found within list items or the unordered list
+     * Sets up event listener for navigation links found within list items or the unordered list.
      * Removes any existing click and mouseover events before re-establishing new ones to control
      * navigation behaviour and visual cues.
      */
@@ -117,6 +117,9 @@
 
             // Redirect back to home page.
             LoadLink("home");
+
+            AddNavigationEvents();
+
         });
     }
 
@@ -189,7 +192,7 @@
                                 class="mt-3">This is my first paragraph</p>`);
 
         // jQuery code to write to the article paragraph.
-        $("main").append(`<article class="container">
+        $("main").append(`<article>
                                 <p id="ArticleParagraph" class="mt-3">This is my article paragraph</p></article>`)
 
     }

@@ -57,6 +57,7 @@
             sessionStorage.clear();
             $("#login").html(`<a class="nav-link" data="login"><i class="fas fa-sign-in-alt"></i> Login</a>`);
             LoadLink("home");
+            AddNavigationEvents();
         });
     }
     function ContactFormValidation() {
@@ -91,7 +92,7 @@
         });
         $("main").append(`<p id="MainParagraph"
                                 class="mt-3">This is my first paragraph</p>`);
-        $("main").append(`<article class="container">
+        $("main").append(`<article>
                                 <p id="ArticleParagraph" class="mt-3">This is my article paragraph</p></article>`);
     }
     function DisplayAboutPage() {
