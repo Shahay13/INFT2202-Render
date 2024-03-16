@@ -383,7 +383,6 @@
             $.get("./data/users.json", function(data){
                 // Loop through the users.json file.
                 for(const user of data.users){
-                    console.log(user);
 
                     let username:string = document.forms[0].username.value;
                     let password:string = document.forms[0].password.value;

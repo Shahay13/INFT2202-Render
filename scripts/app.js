@@ -228,7 +228,6 @@
             let newUser = new core.User();
             $.get("./data/users.json", function (data) {
                 for (const user of data.users) {
-                    console.log(user);
                     let username = document.forms[0].username.value;
                     let password = document.forms[0].password.value;
                     if (username === user.Username && password === user.Password) {
