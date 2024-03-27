@@ -1,3 +1,11 @@
+/*
+ * File: app.css
+ * Author: Takirul
+ * Date: March 28, 2024
+ * Description: This file is the main stylesheet for the application's layout and design elements.
+ */
+
+/* Input group addon styles */
 .input-group-addon:first-child
 {
     border-right: 0;
@@ -19,6 +27,7 @@
     font-size: 18px;
 }
 
+/* Input group form control styles */
 .input-group .form-control
 {
     position:relative;
@@ -33,6 +42,7 @@
     border-bottom-left-radius: 0;
 }
 
+/* Login container styles */
 .login
 {
     padding: 2rem 1rem;
@@ -47,4 +57,77 @@
     border-color: darkgrey;
     border-radius: .4em;
     width: 100%;
+}
+
+/* Chart container styles */
+.chart-container
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+    width: 80vw;
+    margin: 0 auto;
+}
+
+/* Responsive design adjustments for event list on small screens */
+@media screen and (max-width: 576px)
+{
+    #eventList
+    {
+        padding: 0;
+        list-style-type: none;
+        display: block;
+    }
+
+    #eventList li
+    {
+        margin-bottom: 15px;
+        border: 3px solid teal;
+        padding: 10px;
+    }
+
+    #eventList h3
+    {
+        margin-top: 0;
+    }
+
+    .remove-btn
+    {
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+/* Responsive design adjustments for event list on medium and larger screens */
+@media screen and (min-width: 601px)
+{
+    #eventList
+    {
+        padding: 0;
+        list-style-type: none;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    #eventList li
+    {
+        flex: 1 1 calc(50% - 20px);
+        margin: 10px;
+        border: 3px solid teal;
+        padding: 10px;
+    }
+
+    #eventList h3
+    {
+        margin-top: 0;
+    }
+
+    .remove-btn
+    {
+        display: block;
+        width: auto;
+        margin-top: 10px;
+    }
 }

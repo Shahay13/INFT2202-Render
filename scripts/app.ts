@@ -1,40 +1,55 @@
+/**
+ * File: app.ts
+ * Author: Takirul
+ * Date: March 28, 2024.
+ * Description: This file contains the main logic for a single-page application (SPA) that dynamically
+ * loads content based on user interaction. It utilizes jQuery for DOM manipulation and event handling.
+ */
+
 "use strict";
 
 // IIFE - Immediately Invoked Functional Expression.
+
 (function(){
 
     /**
-     * Binds click, mouseover, and mouseout events to anchor tags with class "link" and a matching
-     * data attribute. Applies CSS changes for visual feedback and handles link activation on click.
-     * @param link
+     * Binds event handlers to anchor tags with the 'link' class and a specific data attribute.
+     * It provides visual feedback on mouseover and mouseout, and triggers link loading on click.
+     *
+     * @param {string} link - The data attribute value to identify the anchor tags to bind.
      */
-    function AddLinkEvents(link:string):void {
+    function AddLinkEvents(link: string): void
+    {
+        // Select anchor tags with class 'link' and the specified data attribute.
+        let linkQuery = $(`a.link[data-link='${link}']`);
 
-        let linkQuery = $(`a.link[data=${link}]`);
+        // Clear existing event handlers to prevent duplication.
+        linkQuery.off("click mouseover mouseout");
 
-        // Remove all link events from event queue.
-        linkQuery.off("click");
-        linkQuery.off("mouseover");
-        linkQuery.off("mouseout");
-
-        // Add css to adjust look of links.
-        linkQuery.css("text-decoration", "underline");
-        linkQuery.css("color", "blue");
-
-        // Add link events.
-        linkQuery.on("click", function(){
-            LoadLink(`${link}`);
+        // Style links to indicate interactivity.
+        linkQuery.css({
+            "text-decoration": "underline",
+            "color": "blue"
         });
 
-        linkQuery.on("mouseover", function(){
-            $(this).css("cursor", "pointer");
-            $(this).css("font-weight", "bold");
+        // Bind click event to load the associated link content.
+        linkQuery.on("click", function() {
+            // Load the content corresponding to the 'link' data attribute.
+            LoadLink(link);
         });
 
+        // Bind mouseover event to enhance link visibility.
+        linkQuery.on("mouseover", function() {
+            $(this).css({
+                "cursor": "pointer",
+                "font-weight": "bold"
+            });
+        });
+
+        // Bind mouseout event to reset link style to default.
         linkQuery.on("mouseout", function() {
             $(this).css("font-weight", "normal");
         });
-
     }
 
     /**
@@ -42,8 +57,8 @@
      * Removes any existing click and mouseover events before re-establishing new ones to control
      * navigation behaviour and visual cues.
      */
-    function AddNavigationEvents():void {
-
+    function AddNavigationEvents():void
+    {
         // Finds all navigation links.
         let navLinks = $("ul>li>a");
 
@@ -69,7 +84,7 @@
      * @param link
      * @param data
      */
-    function LoadLink(link:string, data:string = ""): void{
+    function LoadLink(link: string = "home", data: string = ""): void {
 
         router.ActiveLink = link;
         AuthGuard();
@@ -92,34 +107,63 @@
     }
 
     function AuthGuard(): void{
-        let protected_routes:string[] = ["contact-list"];
+        let protected_routes:string[] = ["contact-list", "statistics", "event-planning"];
         if(protected_routes.indexOf(router.ActiveLink) > -1) {
             // Check if user is logged in.
             if(!sessionStorage.getItem("user")){
                 // Change active link to login page.
                 router.ActiveLink = "login";
+                // Show an error message.
+                alert("User is not authenticated. Sign in to access this page.");
             }
         }
     }
 
-    function CheckLogin(){
-        // Change login nav element to logout.
-        if(sessionStorage.getItem("user")){
+    function CheckLogin() {
+        // Check if the user is logged in.
+        if(sessionStorage.getItem("user")) {
+            // Change the login nav element to logout.
             $("#login").html(`<a id="logout" class="nav-link" href="#"><i class="fas fa-undo"></i> Logout</a>`);
+
+            // Check if the Statistics link already exists to prevent duplication.
+            if($("ul.navbar-nav li a[data='statistics']").length === 0) {
+                // Add the Statistics link to the navbar for authenticated users.
+                let statisticsNavItem = `<li class="nav-item"><a class="nav-link" data="statistics"><i class="fa-solid fa-chart-line"></i> Statistics</a></li>`;
+                // Append the Statistics link to the navbar.
+                $("ul.navbar-nav").append(statisticsNavItem);
+            }
+
+            // Check if the Event Planning link already exists to prevent duplication.
+            if($("ul.navbar-nav li a[data='event-planning']").length === 0) {
+                // Add the Event Planning link to the navbar for authenticated users.
+                let eventPlanningNavItem = `<li class="nav-item"><a class="nav-link" data="event-planning"><i class="fa-solid fa-calendar-plus"></i> Event Planning</a></li>`;
+                // Append the Event Planning link to the navbar.
+                $("ul.navbar-nav").append(eventPlanningNavItem);
+            }
+
+            // Rebind the navigation events to include the new link.
+            AddNavigationEvents();
         }
 
-        // When user clicks logout, clear session storage.
-        $("#logout").on("click", function(){
+        // Bind the logout event after changing the login/logout link.
+        $(document).on("click", "#logout", function() {
             // Perform logout.
             sessionStorage.clear();
-            // Swap out the login link for logout.
+
+            // Swap out the logout link for login.
             $("#login").html(`<a class="nav-link" data="login"><i class="fas fa-sign-in-alt"></i> Login</a>`);
 
-            // Redirect back to home page.
+            // Remove the Statistics link if it exists.
+            $("li a[data='statistics']").parent().remove();
+
+            // Remove the Event Planning link if it exists.
+            $("li a[data='event-planning']").parent().remove();
+
+            // Redirect back to home page with a default 'home' link.
             LoadLink("home");
 
+            // Rebind the navigation events to reflect the changes.
             AddNavigationEvents();
-
         });
     }
 
@@ -179,34 +223,18 @@
     }
 
     // Functions that run when the user is on that page.
-    function DisplayHomePage(){
-        console.log("Home Page");
-
-        // jQuery code to redirect user when they click the button.
-        $("#AboutUsBtn").on("click", () => {
-            LoadLink("about");
-        });
-
-        // jQuery code to write to the main paragraph.
-        $("main").append(`<p id="MainParagraph"
-                                class="mt-3">This is my first paragraph</p>`);
-
-        // jQuery code to write to the article paragraph.
-        $("main").append(`<article>
-                                <p id="ArticleParagraph" class="mt-3">This is my article paragraph</p></article>`)
+    function DisplayHome(){
+        console.log("Home");
 
     }
 
-    function DisplayAboutPage(){
-        console.log("About Us Page");
+    function DisplayPortfolio(){
+        console.log("Portfolio");
 
-        $("#AboutUsBtn").on("click", () => {
-            LoadLink("about");
-        });
     }
 
-    function DisplayContactPage(){
-        console.log("Contact Us Page");
+    function DisplayContact(){
+        console.log("Contact Us");
 
         $("a[data='contact-list']").off("click");
         $("a[data='contact-list']").on("click", function (){
@@ -230,8 +258,8 @@
         });
     }
 
-    function DisplayContactListPage(){
-        console.log("Contact List Page");
+    function DisplayContactList(){
+        console.log("Contact List");
 
         if(localStorage.length > 0){
             let contactList = document.getElementById("contactList") as HTMLElement;
@@ -275,7 +303,7 @@
         });
 
         $("button.delete").on("click", function(){
-            if(confirm("Confirm contact Delete?")){
+            if(confirm("Delete contact, are you sure?")){
                 localStorage.removeItem($(this).val() as string);
             }
 
@@ -285,24 +313,32 @@
 
     }
 
-    function DisplayProductPage(){
-        console.log("Product Page");
+    function DisplayTeam(){
+        console.log("Team");
 
-        $("#AboutUsBtn").on("click", ()=> {
-            LoadLink("about");
+    }
+
+    function DisplayBlog(){
+        console.log("Blog");
+
+        $("a[data='statistics']").off("click");
+        $("a[data='statistics']").on("click", function (){
+            LoadLink("statistics");
+        });
+
+        $("a[data='event-planning']").off("click");
+        $("a[data='event-planning']").on("click", function (){
+            LoadLink("event-planning");
         });
     }
 
-    function DisplayServicesPage(){
-        console.log("Services Page");
+    function DisplayServices(){
+        console.log("Services");
 
-        $("#AboutUsBtn").on("click", ()=> {
-            LoadLink("about");
-        });
     }
 
-    function DisplayEditPage(){
-        console.log("Edit Page");
+    function DisplayEdit(){
+        console.log("Edit");
 
         ContactFormValidation();
 
@@ -333,43 +369,43 @@
                 });
             }
 
-            break;
+                break;
 
             // Edit operation.
             default:
-                {
-                    // Get the contact info from local storage.
-                    let contact = new core.Contact();
-                    // Get the key for the contact.
-                    contact.deserialize(localStorage.getItem(page) as string);
-                    // Display the contact information.
-                    $("#fullName").val(contact.fullName);
-                    $("#contactNumber").val(contact.contactNumber);
-                    $("#emailAddress").val(contact.emailAddress);
+            {
+                // Get the contact info from local storage.
+                let contact = new core.Contact();
+                // Get the key for the contact.
+                contact.deserialize(localStorage.getItem(page) as string);
+                // Display the contact information.
+                $("#fullName").val(contact.fullName);
+                $("#contactNumber").val(contact.contactNumber);
+                $("#emailAddress").val(contact.emailAddress);
 
-                    $("#editButton").on("click", (event)=> {
-                        // Prevent form submission.
-                        event.preventDefault();
-                        // Read and store values in the form fields.
-                        contact.fullName = $("#fullName").val() as string;
-                        contact.contactNumber = $("#contactNumber").val() as string;
-                        contact.emailAddress = $("#emailAddress").val() as string;
+                $("#editButton").on("click", (event)=> {
+                    // Prevent form submission.
+                    event.preventDefault();
+                    // Read and store values in the form fields.
+                    contact.fullName = $("#fullName").val() as string;
+                    contact.contactNumber = $("#contactNumber").val() as string;
+                    contact.emailAddress = $("#emailAddress").val() as string;
 
-                        // Serialize the edited contact to create a new key.
-                        localStorage.setItem(page, contact.serialize() as string);
-                        LoadLink("contact-list");
-                    });
+                    // Serialize the edited contact to create a new key.
+                    localStorage.setItem(page, contact.serialize() as string);
+                    LoadLink("contact-list");
+                });
 
-                    $("#cancelButton").on("click", ()=> {
-                        LoadLink("contact-list");
-                    });
-                }
+                $("#cancelButton").on("click", ()=> {
+                    LoadLink("contact-list");
+                });
+            }
                 break;
         }
     }
 
-    function DisplayLoginPage(){
-        console.log("Login Page");
+    function DisplayLogin(){
+        console.log("Login");
         AddLinkEvents("register");
 
         let messageArea = $("#messageArea");
@@ -422,30 +458,155 @@
         });
     }
 
-    function DisplayRegisterPage(){
-        console.log("Register Page");
+    function DisplayStatistics(){
+        console.log("Statistics");
+
+    }
+
+    function DisplayEventPlanning() {
+        console.log("Event Planning");
+
+        // Event interface to define the structure of an event object
+        interface IEvent {
+            id: string;
+            title: string;
+            date: string;
+            description: string;
+        }
+
+        // Try-catch block for local storage operations
+        let events: IEvent[] = [];
+        try {
+            events = JSON.parse(localStorage.getItem('events') || '[]');
+        } catch (error) {
+            console.error("Error reading from local storage", error);
+        }
+
+        // Function to add a new event
+        function addEvent(title: string, date: string, description: string): void {
+            const newEvent: IEvent = {
+                id: `event-${Date.now()}`,
+                title,
+                date,
+                description
+            };
+            events.push(newEvent);
+            localStorage.setItem('events', JSON.stringify(events));
+            updateEventList();
+        }
+
+        // Function to remove an event
+        function removeEvent(eventId: string): void {
+            events = events.filter(event => event.id !== eventId);
+            localStorage.setItem('events', JSON.stringify(events));
+            updateEventList();
+        }
+
+        // Function to clear all events
+        function removeAllEvent(): void {
+            events = [];
+            localStorage.setItem('events', JSON.stringify(events));
+            updateEventList();
+        }
+
+        // Function to update the event list in the UI
+        function updateEventList(): void {
+            try {
+                const eventListElement = document.getElementById('eventList');
+                if (eventListElement) {
+                    // Clear the current list
+                    eventListElement.innerHTML = '';
+                    // Add each event as a list item
+                    events.forEach(event => {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `
+                        <h3>${event.title}</h3>
+                        <p>Date: ${event.date}</p>
+                        <p>${event.description}</p>
+                        <button class="btn btn-danger remove-btn" data-event-id="${event.id}">
+                            <i class="fa-solid fa-trash-can"></i> Remove
+                        </button>
+                    `;
+                        eventListElement.appendChild(listItem);
+                    });
+                }
+            } catch (error) {
+                console.error("Error updating the event list", error);
+            }
+        }
+
+        // Event delegation for remove button
+        document.getElementById('eventList')?.addEventListener('click', function(event) {
+            const target = event.target as HTMLElement;
+            if (target.classList.contains('remove-btn')) {
+                const eventId = target.getAttribute('data-event-id');
+                if (eventId && confirm("Remove event details, are you sure?")) {
+                    removeEvent(eventId);
+                }
+            }
+        });
+
+        document.getElementById('removeAllButton')?.addEventListener('click', function() {
+            // Check if there are any events to remove
+            if (events.length === 0) {
+                alert("There are no event details to remove.");
+            } else {
+                // Ask for confirmation before removing all events
+                if (confirm("Remove all event details, are you sure?")) {
+                    removeAllEvent();
+                }
+            }
+        });
+
+        // Function to handle the form submission for new events
+        function handleEventFormSubmit(event: Event): void {
+            event.preventDefault();
+            const titleInput = document.getElementById('eventTitle') as HTMLInputElement;
+            const dateInput = document.getElementById('eventDate') as HTMLInputElement;
+            const descriptionInput = document.getElementById('eventDescription') as HTMLTextAreaElement;
+
+            if (titleInput && dateInput && descriptionInput) {
+                addEvent(titleInput.value, dateInput.value, descriptionInput.value);
+                titleInput.value = '';
+                dateInput.value = '';
+                descriptionInput.value = '';
+            }
+        }
+
+        // Add event listener for the event form submission
+        document.getElementById('eventForm')?.addEventListener('submit', handleEventFormSubmit);
+
+        // Initial call to populate the event list
+        updateEventList();
+    }
+
+    function DisplayRegister(){
+        console.log("Register");
         AddLinkEvents("login");
     }
 
-    function Display404Page(){
-        console.log("404 Page");
+    function Display404(){
+        console.log("404");
     }
 
     function ActiveLinkCallback():Function{
         switch(router.ActiveLink){
-            case "home": return DisplayHomePage;
-            case "about": return DisplayAboutPage;
-            case "contact": return DisplayContactPage;
-            case "contact-list": return DisplayContactListPage;
-            case "products": return DisplayProductPage;
-            case "services": return DisplayServicesPage;
-            case "register": return DisplayRegisterPage;
-            case "login": return DisplayLoginPage;
-            case "edit": return DisplayEditPage;
-            case "404": return Display404Page;
+            case "home": return DisplayHome;
+            case "portfolio": return DisplayPortfolio;
+            case "services": return DisplayServices;
+            case "team": return DisplayTeam;
+            case "blog": return DisplayBlog;
+            case "contact": return DisplayContact;
+            case "login": return DisplayLogin;
+            case "statistics": return DisplayStatistics;
+            case "event-planning": return DisplayEventPlanning;
+            case "register": return DisplayRegister;
+            case "contact-list": return DisplayContactList;
+            case "edit": return DisplayEdit;
+            case "404": return Display404;
             default:
-                    console.log("ERROR: callback function does not exist " + router.ActiveLink);
-                    return new Function();
+                console.log("ERROR: callback function does not exist " + router.ActiveLink);
+                return new Function();
         }
     }
 
@@ -494,4 +655,4 @@
     }
     window.addEventListener("load", Start);
 
-})()
+})();
