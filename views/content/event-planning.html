@@ -1,27 +1,42 @@
+<!--
+File: event-planning.html
+Author: Takirul
+Date: March 28, 2024
+Description: This file contains the HTML structure for the Event Planning page.
+-->
+
+<!-- Event Planning Page Title -->
 <h1 class="mb-5"> Event Planning</h1>
+
+<!-- Message Area -->
 <div id="messageArea"></div>
 
+<!-- Event Form -->
 <div class="row justify-content-lg-center g-3">
     <form id="eventForm" class="col-lg-6 col-md-10 col-sm-10">
 
+        <!-- Event Title Input -->
         <div class="form-group mb-3">
             <span class="input-group-text">Event Title</span>
             <input id="eventTitle" name="eventTitle" type="text" class="form-control"
                    aria-describedby="Event Title" aria-label="Event Title Input" required>
         </div>
 
+        <!-- Event Date Input -->
         <div class="form-group mb-3">
             <span class="input-group-text">Event Date</span>
             <input id="eventDate" name="eventDate" type="date" class="form-control"
                    aria-describedby="Event Date" aria-label="Event Date Input" required>
         </div>
 
+        <!-- Event Description Input -->
         <div class="form-group mb-3">
             <span class="input-group-text">Event Description</span>
             <textarea id="eventDescription" name="eventDescription" type="text" class="form-control"
                    aria-describedby="Event Description" aria-label="Event Description Input" required></textarea>
         </div>
 
+        <!-- Add Event, Clear, and Remove All Buttons -->
         <button id="addEventButton" type="submit" class="btn btn-success">
             <i class="fa-solid fa-circle-plus"></i> Add Event
         </button>

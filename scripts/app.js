@@ -52,20 +52,24 @@
     }
     function CheckLogin() {
         if (sessionStorage.getItem("user")) {
-            $("#login").html(`<a id="logout" class="nav-link" href="#"><i class="fas fa-undo"></i> Logout</a>`);
+            $("#login").html(`<a id="logout" class="nav-link" href="#">
+                                        <i class="fas fa-undo"></i> Logout</a>`);
             if ($("ul.navbar-nav li a[data='statistics']").length === 0) {
-                let statisticsNavItem = `<li class="nav-item"><a class="nav-link" data="statistics"><i class="fa-solid fa-chart-line"></i> Statistics</a></li>`;
+                let statisticsNavItem = `<li class="nav-item"><a class="nav-link" data="statistics">
+                                        <i class="fa-solid fa-chart-line"></i> Statistics</a></li>`;
                 $("ul.navbar-nav").append(statisticsNavItem);
             }
             if ($("ul.navbar-nav li a[data='event-planning']").length === 0) {
-                let eventPlanningNavItem = `<li class="nav-item"><a class="nav-link" data="event-planning"><i class="fa-solid fa-calendar-plus"></i> Event Planning</a></li>`;
+                let eventPlanningNavItem = `<li class="nav-item"><a class="nav-link" data="event-planning">
+                                        <i class="fa-solid fa-calendar-plus"></i> Event Planning</a></li>`;
                 $("ul.navbar-nav").append(eventPlanningNavItem);
             }
             AddNavigationEvents();
         }
         $(document).on("click", "#logout", function () {
             sessionStorage.clear();
-            $("#login").html(`<a class="nav-link" data="login"><i class="fas fa-sign-in-alt"></i> Login</a>`);
+            $("#login").html(`<a class="nav-link" data="login">
+                                        <i class="fas fa-sign-in-alt"></i> Login</a>`);
             $("li a[data='statistics']").parent().remove();
             $("li a[data='event-planning']").parent().remove();
             LoadLink("home");
@@ -307,8 +311,11 @@
                         <h3>${event.title}</h3>
                         <p>Date: ${event.date}</p>
                         <p>${event.description}</p>
+                        <button class="btn btn-primary edit-btn" data-event-id="${event.id}">
+                            <i class="fas fa-edit fa-sm"></i> Edit
+                        </button>
                         <button class="btn btn-danger remove-btn" data-event-id="${event.id}">
-                            <i class="fa-solid fa-trash-can"></i> Remove
+                            <i class="fas fa-trash-alt fa-sm"></i> Remove
                         </button>
                     `;
                         eventListElement.appendChild(listItem);
@@ -319,6 +326,23 @@
                 console.error("Error updating the event list", error);
             }
         }
+        document.getElementById('eventList')?.addEventListener('click', function (event) {
+            const target = event.target;
+            if (target.classList.contains('edit-btn')) {
+                const eventId = target.getAttribute('data-event-id');
+                if (eventId) {
+                    const eventToEdit = events.find(event => event.id === eventId);
+                    if (eventToEdit) {
+                        const titleInput = document.getElementById('eventTitle');
+                        const dateInput = document.getElementById('eventDate');
+                        const descriptionInput = document.getElementById('eventDescription');
+                        titleInput.value = eventToEdit.title;
+                        dateInput.value = eventToEdit.date;
+                        descriptionInput.value = eventToEdit.description;
+                    }
+                }
+            }
+        });
         document.getElementById('eventList')?.addEventListener('click', function (event) {
             const target = event.target;
             if (target.classList.contains('remove-btn')) {

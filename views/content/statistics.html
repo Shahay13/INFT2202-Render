@@ -1,61 +1,126 @@
+<!--
+File: statistics.html
+Author: Takirul
+Date: March 28, 2024
+Description: This file contains the code for displaying the website's statistics using Chart.js.
+-->
+
+<!-- Statistics Page Title -->
 <h1 class="mb-5"> Statistics</h1>
 
-<div class="chart-container" style="position: relative; height:40vh; width:80vw">
+<!-- Chart Container to hold the Chart -->
+<div class="chart-container" style="position: relative; height:60vh; width:80vw">
     <canvas id="myChart"></canvas>
 </div>
 
 <script>
-    // Fetch the statistics data from a JSON file
+
+    // Fetch the statistics data from a JSON file.
     $.getJSON("./data/statistics.json", function(data) {
 
+        // Extract the labels (dates) from the data.
         const labels = data.map(stat => stat.date);
+
+        // Extract the visits data from the data.
         const visitsData = data.map(stat => stat.visits);
+
+        // Extract the unique visitors data from the data.
         const uniqueVisitorsData = data.map(stat => stat.uniqueVisitors);
+
+        // Extract the page views data from the data.
         const pageViewsData = data.map(stat => stat.pageViews);
 
-        // Create the chart using Chart.js
+        // Get the context of the canvas to draw the chart.
         const ctx = document.getElementById('myChart').getContext('2d');
+
+        // Create the chart using Chart.js.
         const myChart = new Chart(ctx, {
+
+            // Type of chart is line.
             type: 'line',
             data: {
+
+                // Dates are used as labels.
                 labels: labels,
                 datasets: [
                     {
+
+                        // Label for the visits' data.
                         label: 'Visits',
+
+                        // Data for the visits.
                         data: visitsData,
+
+                        // Background color for the visits' data.
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
+
+                        // Border color for the visits' data.
                         borderColor: 'rgba(255, 99, 132, 1)',
+
+                        // Border width for the visits' data.
                         borderWidth: 1
                     },
                     {
+
+                        // Label for the unique visitors data.
                         label: 'Unique Visitors',
+
+                        // Data for the unique visitors.
                         data: uniqueVisitorsData,
+
+                        // Background color for the unique visitors.
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
+
+                        // Border color for the unique visitors data.
                         borderColor: 'rgba(54, 162, 235, 1)',
+
+                        // Border width for the unique visitors data.
                         borderWidth: 1
                     },
                     {
+
+                        // Label for the page views data.
                         label: 'Page Views',
+
+                        // Data for the page views.
                         data: pageViewsData,
+
+                        // Background color for the page views data.
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
+
+                        // Border color for the page views data.
                         borderColor: 'rgba(75, 192, 192, 1)',
+
+                        // Border width for the page views data.
                         borderWidth: 1
                     }
                 ]
             },
             options: {
+
+                // The chart will resize itself based on the size of its container.
                 responsive: true,
+
+                // The chart will not maintain the aspect ratio when resizing.
                 maintainAspectRatio: false,
                 scales: {
                     y: {
+                        // The y-axis will start from 0.
                         beginAtZero: true
                     }
                 }
             }
         });
     }).fail(function (jqxhr, textStatus, error) {
+
+        // Error handling for the getJSON request.
         const err = textStatus + ", " + error;
+
+        // Log the error to the console.
         console.error("Request Failed: " + err);
+
+        // Alert the user about the error.
         alert("An error occurred while loading the statistics: " + err);
     });
+
 </script>

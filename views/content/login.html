@@ -1,11 +1,26 @@
+<!--
+File: login.html
+Author: Takirul
+Date: March 28, 2024
+Description: This file contains the HTML structure for the Login page.
+-->
+
 <div class="row">
     <div class="offset-md-3 col-md-6 col-sm-12">
+
+        <!-- Login Form Container -->
         <div class="login" id="contentArea">
+
+            <!-- Login Form Heading -->
             <h1 class="display-4">Login</h1>
+
+            <!-- Login Form -->
             <form id="loginForm" novalidate>
 
+                <!-- Message Area -->
                 <div id="messageArea"></div>
 
+                <!-- Username Input -->
                 <div class="form-group mb-2">
                     <div class="input-group">
                   <span class="input-group-addon">
@@ -18,6 +33,7 @@
 
                 </div>
 
+                <!-- Password Input -->
                 <div class="form-group mb-2">
                     <div class="input-group">
                   <span class="input-group-addon">
@@ -29,6 +45,8 @@
                     </div>
 
                 </div>
+
+                <!-- Login and Clear Buttons -->
                 <div class="text-end">
                     <button id="loginButton" type="button" class="btn btn-primary btn-lg">
                         <i class="fas fa-sign-in-alt"></i> Login</button>
@@ -38,9 +56,12 @@
             </form>
 
         </div>
+
+        <!-- Registration Link -->
         <p class="text-center text-muted small">
             Don't have an account?
             <a class="link" data="register">Register Here!</a>
         </p>
+
     </div>
 </div>

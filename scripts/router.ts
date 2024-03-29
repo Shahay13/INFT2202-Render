@@ -1,35 +1,81 @@
+/*
+ * File: router.ts
+ * Author: Takirul
+ * Date: March 28, 2024
+ * Description: This file contains the Router class within the 'core' namespace.
+ * The Router class is responsible for managing the navigation and routing logic of the application.
+ */
+
 "use strict";
 
 namespace core {
 
+    /**
+     * The Router class handles the application's internal routing mechanism.
+     * It maintains a routing table for navigation links and provides functionality
+     * to add, remove, find, and navigate routes.
+     */
     export class Router {
 
+        // Stores the current active link.
         private _activeLink:string;
 
+        // An array that holds all the routes.
         private _routingTable:string[];
 
+        // Data associated with the current link.
         private _linkData:string;
 
+        /**
+         * The constructor initializes the Router with default values.
+         */
         constructor() {
+
+            // Initialize with no active link.
             this._activeLink = "";
+
+            // Start with an empty routing table.
             this._routingTable = [];
+
+            // No link data initially.
             this._linkData = "";
         }
 
         // Public properties (getters and setters).
-        public get LinkData():string{
+
+        /**
+         * Gets the data associated with the current link.
+         * @returns {string} The current link data.
+         */
+        public get LinkData():string {
             return this._linkData;
         }
 
-        public set LinkData(link:string){
+        /**
+         * Sets the data for the current link.
+         * @param {string} link - The new link data to set.
+         */
+        public set LinkData(link:string) {
+
+            // Update the link data.
             this._linkData = link;
         }
 
-        public get ActiveLink():string{
+        /**
+         * Gets the current active link.
+         * @returns {string} The active link.
+         */
+        public get ActiveLink():string {
             return this._activeLink;
         }
 
-        public set ActiveLink(link:string){
+        /**
+         * Sets the current active link.
+         * @param {string} link - The new active link to set.
+         */
+        public set ActiveLink(link:string) {
+
+            // Update the active link.
             this._activeLink = link;
         }
 
@@ -38,7 +84,7 @@ namespace core {
          * @param route
          * @return {void}
          */
-        public Add(route:string){
+        public Add(route:string) {
             this._routingTable.push(route);
         }
 
@@ -47,7 +93,7 @@ namespace core {
          * @param routingTable
          * @return {void}
          */
-        public AddTable(routingTable:string[]){
+        public AddTable(routingTable:string[]) {
             this._routingTable = routingTable;
         }
 
@@ -57,7 +103,7 @@ namespace core {
          * @param route
          * @returns {*}
          */
-        public Find(route:string):number{
+        public Find(route:string):number {
             return this._routingTable.indexOf(route);
         }
 
@@ -67,12 +113,12 @@ namespace core {
          * @param route
          * @returns {boolean}
          */
-        public Remove(route:string):boolean{
-            if(this.Find(route) > -1){
+        public Remove(route:string):boolean {
+            if (this.Find(route) > -1) {
                 this._routingTable.splice(this.Find(route), 1);
                 return true;
             }
-            else{
+            else {
                 return false;
             }
         }
@@ -81,11 +127,10 @@ namespace core {
          * This method returns the routing table contents in a comma delimited separated string.
          * @returns {string}
          */
-        public toString():string{
+        public toString():string {
             return this._routingTable.toString();
         }
     }
-
 }
 
 // Instantiate a new router.

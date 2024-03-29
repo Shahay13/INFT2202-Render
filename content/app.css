@@ -2,71 +2,102 @@
  * File: app.css
  * Author: Takirul
  * Date: March 28, 2024
- * Description: This file is the main stylesheet for the application's layout and design elements.
+ * Description: This CSS file defines the styles for the application's layout and design elements.
+ * It includes styles for input groups, form controls, login containers, chart containers,
+ * and responsive design adjustments.
  */
 
 /* Input group addon styles */
 .input-group-addon:first-child
 {
+    /* Removes the right border for the first child of the input group addon */
     border-right: 0;
 }
 
 .input-group-addon
 {
+    /* Sets the padding around the addon */
     padding: 6px 12px;
+    /* Defines the font size for the addon text */
     font-size: 14px;
+    /* Sets the font weight to normal */
     font-weight: 400;
+    /* Defines the line height for the addon */
     line-height: 1;
+    /* Centers the text inside the addon */
     text-align: center;
+    /* Adds a border with a specified color and thickness */
     border: 1px solid darkgrey;
+    /* Rounds the corners of the addon */
     border-radius: 4px;
 }
 
 .input-group-addon .fa
 {
+    /* Sets the font size for Font Awesome icons within the addon */
     font-size: 18px;
 }
 
 /* Input group form control styles */
 .input-group .form-control
 {
-    position:relative;
+    /* Positions the form control relative to its normal position */
+    position: relative;
+    /* Stacks order: places the form control above other elements */
     z-index: 2;
-    float:left;
+    /* Floats the form control to the left */
+    float: left;
+    /* Removes the bottom margin for the form control */
     margin-bottom: 0;
 }
 
 .input-group .form-control:last-child
 {
+    /* Removes the top-left border radius for the last form control */
     border-top-left-radius: 0;
+    /* Removes the bottom-left border radius for the last form control */
     border-bottom-left-radius: 0;
 }
 
 /* Login container styles */
 .login
 {
+    /* Sets the top and bottom padding to 2rem, left and right to 1rem */
     padding: 2rem 1rem;
+    /* Sets the bottom margin to create space below the login container */
     margin-bottom: 2rem;
+    /* Sets the background color for the login container */
     background-color: lightgrey;
+    /* Rounds the corners of the login container */
     border-radius: .3rem;
 }
 
 .login input
 {
+    /* Sets the background color for input fields within the login container */
     background-color: white;
+    /* Sets the border color for input fields */
     border-color: darkgrey;
+    /* Rounds the corners of input fields */
     border-radius: .4em;
+    /* Ensures input fields span the full width of the container */
     width: 100%;
 }
 
 /* Chart container styles */
 .chart-container
 {
+    /* Enables flexbox layout for the chart container */
     display: flex;
+    /* Centers the content horizontally within the container */
     justify-content: center;
+    /* Centers the content vertically within the container */
     align-items: center;
+    /* Sets the height of the container relative to the viewport height */
     height: 40vh;
+    /* Sets the width of the container relative to the viewport width */
     width: 80vw;
+    /* Centers the container horizontally within its parent */
     margin: 0 auto;
 }
 
@@ -75,27 +106,37 @@
 {
     #eventList
     {
+        /* Removes padding */
         padding: 0;
+        /* Removes list styling */
         list-style-type: none;
+        /* Sets the list to display as a block */
         display: block;
     }
 
     #eventList li
     {
+        /* Sets the bottom margin for list items */
         margin-bottom: 15px;
+        /* Sets the border color and thickness for list items */
         border: 3px solid teal;
+        /* Sets the padding inside list items */
         padding: 10px;
     }
 
     #eventList h3
     {
+        /* Removes the top margin for headings within list items */
         margin-top: 0;
     }
 
     .remove-btn
     {
+        /* Sets the remove button to display as a block */
         display: block;
+        /* Sets the width of the remove button to span the full width of its container */
         width: 100%;
+        /* Sets the top margin for the remove button */
         margin-top: 10px;
     }
 }
@@ -105,29 +146,41 @@
 {
     #eventList
     {
+        /* Removes padding */
         padding: 0;
+        /* Removes list styling */
         list-style-type: none;
+        /* Enables flexbox layout for the list */
         display: flex;
+        /* Allows list items to wrap onto the next line */
         flex-wrap: wrap;
     }
 
     #eventList li
     {
+        /* Sets the flex grow, shrink, and basis values for list items */
         flex: 1 1 calc(50% - 20px);
+        /* Sets the margin around list items */
         margin: 10px;
+        /* Sets the border color and thickness for list items */
         border: 3px solid teal;
+        /* Sets the padding inside list items */
         padding: 10px;
     }
 
     #eventList h3
     {
+        /* Removes the top margin for headings within list items */
         margin-top: 0;
     }
 
     .remove-btn
     {
+        /* Sets the remove button to display as a block */
         display: block;
+        /* Sets the width of the remove button to be automatic */
         width: auto;
+        /* Sets the top margin for the remove button */
         margin-top: 10px;
     }
 }
