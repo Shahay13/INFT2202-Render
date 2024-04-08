@@ -1,68 +1,91 @@
-/*
- * File: server.ts
- * Author: Takirul
- * Date: March 28, 2024
- * Description: This server configuration file sets up a basic HTTP server that serves files from the local directory.
- * It listens on a port specified by the environment or defaults to 3000. It handles basic routing for the
- * home page and serves files with appropriate MIME types.
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
  */
 
-"use strict";
-
-// Import the HTTP module to create an HTTP server.
+import app from './config/app';
+import debug from 'debug';
 import http from 'http';
+import {HttpError} from "http-errors";
 
-// Import the File System module to read files from the system.
-import fs from 'fs';
+/**
+ * Get port from environment and store in Express.
+ */
 
-// Import the mime-types library to determine MIME types based on file extensions.
-import mime from 'mime-types';
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
 
-// Alias for the mime.lookup function for convenience.
-let lookup = mime.lookup;
+/**
+ * Create HTTP server.
+ */
 
-// Read a port environment variable that was set. Default to port 3000.
-const port = process.env.PORT || 3000;
+const server = http.createServer(app);
 
-// Create an HTTP server that responds to all requests.
-const server = http.createServer((req,
-                                  res) => {
+/**
+ * Listen on provided port, on all network interfaces.
+ */
 
-    // Define the path for the requested resource.
-    let path = req.url as string;
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
-    // Default to the home page if root is requested.
-    if (path === "/" || path === "/home"){
-        path = "/index.html";
-    }
+/**
+ * Normalize a port into a number, string, or false.
+ */
 
-    // Determine the MIME type of the requested resource.
-    let mime_type = lookup(path.substring(1)) as string;
+function normalizePort(val : string) {
+  var port = parseInt(val, 10);
 
-    // Attempt to read the requested file from the system.
-    fs.readFile(__dirname + path, function(err, data){
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
 
-        // Respond with a 404 error if the file is not found.
-       if (err) {
-           res.writeHead(404);
-           res.end("Error 404 - File Not Found " + err.message);
-           return;
-       }
+  if (port >= 0) {
+    // port number
+    return port;
+  }
 
-        // Use a default MIME type if one cannot be determined from the file extension.
-       if (!mime_type) {
-           mime_type = "text/plain";
-       }
+  return false;
+}
 
-        // Serve the file data with the appropriate MIME type and security headers.
-       res.setHeader("X-Content-Type-Options", "nosniff");
-       res.writeHead(200, {'Content-Type': mime_type});
-       res.end(data);
+/**
+ * Event listener for HTTP server "error" event.
+ */
 
-    });
-});
+function onError(error : HttpError) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
 
-// Start the server and listen on the specified port. Log a message to the console upon starting.
-server.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/`);
-});
+  const bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  let addr = server.address();
+  const bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr;
+  debug('Listening on ' + bind);
+}
