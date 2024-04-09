@@ -19,9 +19,8 @@ router.get('/contact', function (req, res, next) {
     res.render('index', { title: 'Contact Us', page: "contact", displayName: '' });
 });
 router.get('/contact-list', function (req, res, next) {
-    contact_1.default.find().then(function (contactsCollection) {
-        res.render('index', { title: 'Contact List', page: "contact-list",
-            contacts: contactsCollection, displayName: "" });
+    contact_1.default.find().then(function (data) {
+        res.render('index', { title: 'Contact List', page: "contact-list", contacts: data, displayName: "" });
     }).catch(function (err) {
         console.error("Encountered an Error reading from the Database: " + err);
         res.end();
@@ -54,7 +53,7 @@ router.post('/edit/:id', function (req, res, next) {
 router.get('/add', function (req, res, next) {
     res.render('index', { title: 'Add Contact', page: "edit", contact: '', displayName: "" });
 });
-router.post('/add/:id', function (req, res, next) {
+router.post('/add', function (req, res, next) {
     let newContact = new contact_1.default({
         "FullName": req.body.fullName,
         "ContactNumber": req.body.contactNumber,
@@ -67,7 +66,7 @@ router.post('/add/:id', function (req, res, next) {
         res.end(err);
     });
 });
-router.post('/delete/:id', function (req, res, next) {
+router.get('/delete/:id', function (req, res, next) {
     let id = req.params.id;
     contact_1.default.deleteOne({ _id: id }).then(function () {
         res.redirect('/contact-list');
