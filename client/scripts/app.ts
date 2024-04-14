@@ -39,6 +39,7 @@
         // When the user leaves the full name text box.
         $(input_field_id).on("blur", function ()
         {
+            // Get the value of the current element as a string and store it in inputFieldText.
             let inputFieldText = $(this).val() as string;
 
             // Validation failed.
@@ -54,6 +55,7 @@
             // Validation passed.
             else
             {
+                // Remove the class named "class" from messageArea and then hide it
                 messageArea.removeClass("class").hide();
             }
         });
@@ -105,7 +107,10 @@
             // If the user cancels the deletion, it will prevent the default action and redirect the user back to the contact list page.
             if(!confirm("Confirm contact Delete?"))
             {
+                // Prevent the default action of the event.
                 event.preventDefault();
+
+                // Redirect to the contact list page.
                 location.href="/contact-list";
             }
         })
@@ -154,7 +159,6 @@
         console.log("Login Page");
 
         // Set up a click event handler for the cancel button.
-        // When the cancel button is clicked, it will clear the login form and redirect the user back to the home page.
         $("#cancelButton").on("click", function()
         {
             // Clear the login form.
@@ -186,13 +190,15 @@
         console.log("Community Posts Page");
 
         // Set up a click event handler for delete buttons.
-        // When a delete button is clicked, it will confirm with the user before proceeding with the deletion.
         $("a.delete").on("click", function(event)
         {
             // If the user cancels the deletion, it will prevent the default action and redirect the user back to the community posts page.
             if(!confirm("Confirm post Delete?"))
             {
+                // Prevent the default action of the event.
                 event.preventDefault();
+
+                // Redirect to the community posts page.
                 location.href="/community-posts";
             }
         })
@@ -224,10 +230,13 @@
      */
     function Start()
     {
+        // Log a message to the console indicating that the application has started.
         console.log("App Started!");
 
+        // Get the "id" attribute of the first "body" element and store it in the variable "page_id"
         let page_id = $("body")[0].getAttribute("id");
 
+        // Switch statement to handle different page ids.
         switch(page_id)
         {
             case "home":
@@ -271,6 +280,8 @@
         }
 
     }
+
+    // Add an event listener to the window object that calls the Start function when the page loads.
     window.addEventListener("load", Start);
 
 })();
