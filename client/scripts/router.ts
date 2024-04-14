@@ -1,22 +1,40 @@
+/*
+ * File: router.ts
+ * Author: Takirul Takirul
+ * Date: April 13, 2024
+ * Description: This file contains the Router class which is responsible for managing the routing table.
+ * It provides methods to add, remove, find routes and also to replace the entire routing table.
+ */
+
 "use strict";
 
 namespace core {
 
+    /**
+     * The Router class is responsible for managing the routing table.
+     * It provides methods to add, remove, find routes and also to replace the entire routing table.
+     */
     export class Router {
 
+        // The currently active link.
         private _activeLink:string;
 
+        // The routing table containing all the routes.
         private _routingTable:string[];
 
+        // The data associated with the link.
         private _linkData:string;
 
+        /**
+         * The constructor initializes the active link, routing table and link data.
+         */
         constructor() {
             this._activeLink = "";
             this._routingTable = [];
             this._linkData = "";
         }
 
-        // Public properties (getters and setters).
+        // Getter and setter for the link data.
         public get LinkData():string{
             return this._linkData;
         }
@@ -25,6 +43,7 @@ namespace core {
             this._linkData = link;
         }
 
+        // Getter and setter for the active link.
         public get ActiveLink():string{
             return this._activeLink;
         }
@@ -95,18 +114,21 @@ let router: core.Router = new core.Router();
 router.AddTable([
     "/",
     "/home",
-    "/about",
+    "/portfolio",
     "/services",
-    "/products",
-    "/contact",
-    "/contact-list",
+    "/team",
+    "/blog",
     "/login",
     "/register",
-    "/edit"
+    "/contact-list",
+    "/edit",
+    "/community-posts",
+    "/edit-post"
 ]);
 
 let route:string = location.pathname;
 
+// Set the active link based on the current route.
 router.ActiveLink = (router.Find(route) > -1)
                     ? ( (route) === "/") ? "home" : route.substring(1)
                     : ("404");

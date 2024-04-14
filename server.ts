@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-import app from './config/app';
+import app from './server/config/app';
 import debug from 'debug';
 import http from 'http';
 import {HttpError} from "http-errors";

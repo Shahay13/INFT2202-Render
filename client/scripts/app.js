@@ -1,17 +1,5 @@
 "use strict";
 (function () {
-    function CheckLogin() {
-        if (sessionStorage.getItem("user")) {
-            $("#login").html(`<a id="logout" class="nav-link" href="#">
-                                                            <i class="fas fa-undo"></i> Logout</a>`);
-        }
-        $("#logout").on("click", function () {
-            sessionStorage.clear();
-            $("#login").html(`<a class="nav-link" href="/login">
-                                                        <i class="fas fa-sign-in-alt"></i> Login</a>`);
-            location.href = "/home";
-        });
-    }
     function ContactFormValidation() {
         ValidateField("#fullName", /^([A-Z][a-z]{1,3}\.?\s)?([A-Z][a-z]+)+([\s,-]([A-z][a-z]+))*$/, "Please enter a valid first and lastname.");
         ValidateField("#contactNumber", /^(\+\d{1,3}[\s-.])?\(?\d{3}\)?[\s-.]?\d{3}[\s-.]\d{4}$/, "Please enter a valid contact number.");
@@ -30,46 +18,14 @@
             }
         });
     }
-    function AddContact(fullName, contactNumber, emailAddress) {
-        let contact = new core.Contact(fullName, contactNumber, emailAddress);
-        if (contact.serialize()) {
-            let key = contact.fullName.substring(0, 1) + Date.now();
-            localStorage.setItem(key, contact.serialize());
-        }
-    }
     function DisplayHomePage() {
         console.log("Home Page");
-        $("#AboutUsBtn").on("click", () => {
-            location.href = "/about";
-        });
-        $("main").append(`<p id="MainParagraph"
-                                class="mt-3">This is my first paragraph</p>`);
-        $("main").append(`<article>
-                                <p id="ArticleParagraph" class="mt-3">This is my article paragraph</p></article>`);
     }
-    function DisplayAboutPage() {
-        console.log("About Us Page");
-        $("#AboutUsBtn").on("click", () => {
-            location.href = "/about";
-        });
+    function DisplayTeamPage() {
+        console.log("Team Page");
     }
-    function DisplayContactPage() {
-        console.log("Contact Us Page");
-        $("a[data='contact-list']").off("click");
-        $("a[data='contact-list']").on("click", function () {
-            location.href = "/contact-list";
-        });
-        ContactFormValidation();
-        let sendButton = document.getElementById("sendButton");
-        let subscribeCheckbox = document.getElementById("subscribeCheckbox");
-        sendButton.addEventListener("click", function () {
-            if (subscribeCheckbox.checked) {
-                let fullName = document.forms[0].fullName.value;
-                let contactNumber = document.forms[0].contactNumber.value;
-                let emailAddress = document.forms[0].emailAddress.value;
-                AddContact(fullName, contactNumber, emailAddress);
-            }
-        });
+    function DisplayBlogPage() {
+        console.log("Blog Page");
     }
     function DisplayContactListPage() {
         console.log("Contact-List Page");
@@ -80,17 +36,11 @@
             }
         });
     }
-    function DisplayProductPage() {
-        console.log("Product Page");
-        $("#AboutUsBtn").on("click", () => {
-            location.href = "/about";
-        });
+    function DisplayPortfolioPage() {
+        console.log("Portfolio Page");
     }
     function DisplayServicesPage() {
         console.log("Services Page");
-        $("#AboutUsBtn").on("click", () => {
-            location.href = "/about";
-        });
     }
     function DisplayEditPage() {
         console.log("Edit Page");
@@ -98,34 +48,6 @@
     }
     function DisplayLoginPage() {
         console.log("Login Page");
-        let messageArea = $("#messageArea");
-        $("#loginButton").on("click", function () {
-            let success = false;
-            let newUser = new core.User();
-            $.get("./data/users.json", function (data) {
-                for (const user of data.users) {
-                    let username = document.forms[0].username.value;
-                    let password = document.forms[0].password.value;
-                    if (username === user.Username && password === user.Password) {
-                        newUser.fromJSON(user);
-                        success = true;
-                        break;
-                    }
-                }
-                if (success) {
-                    sessionStorage.setItem("user", newUser.serialize());
-                    messageArea.removeAttr("class").hide();
-                    location.href = "/contact-list";
-                }
-                else {
-                    $("#username").trigger("focus").trigger("select");
-                    messageArea
-                        .addClass("alert alert-danger")
-                        .text("Error: Invalid Credentials")
-                        .show();
-                }
-            });
-        });
         $("#cancelButton").on("click", function () {
             document.forms[0].reset();
             location.href = "/home";
@@ -134,28 +56,39 @@
     function DisplayRegisterPage() {
         console.log("Register Page");
     }
+    function DisplayCommunityPostsPage() {
+        console.log("Community Posts Page");
+        $("a.delete").on("click", function (event) {
+            if (!confirm("Confirm post Delete?")) {
+                event.preventDefault();
+                location.href = "/community-posts";
+            }
+        });
+    }
+    function DisplayEditPostPage() {
+        console.log("Edit Post Page");
+    }
     function Display404Page() {
         console.log("404 Page");
     }
     function Start() {
         console.log("App Started!");
         let page_id = $("body")[0].getAttribute("id");
-        CheckLogin();
         switch (page_id) {
             case "home":
                 DisplayHomePage();
                 break;
-            case "about":
-                DisplayAboutPage();
+            case "team":
+                DisplayTeamPage();
                 break;
-            case "contact":
-                DisplayContactPage();
+            case "blog":
+                DisplayBlogPage();
                 break;
             case "contact-list":
                 DisplayContactListPage();
                 break;
-            case "products":
-                DisplayProductPage();
+            case "portfolio":
+                DisplayPortfolioPage();
                 break;
             case "services":
                 DisplayServicesPage();
@@ -169,6 +102,13 @@
             case "edit":
             case "add":
                 DisplayEditPage();
+                break;
+            case "community-posts":
+                DisplayCommunityPostsPage();
+                break;
+            case "edit-post":
+            case "add-post":
+                DisplayEditPostPage();
                 break;
             case "404":
                 Display404Page();
