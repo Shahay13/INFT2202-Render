@@ -1,50 +1,96 @@
+/*
+ * File: app.css
+ * Author: Takirul Takirul
+ * Date: April 13, 2024
+ * Description: This main CSS file contains styles for input groups, a login form, and card components.
+ */
+
+/* The .input-group-addon:first-child class is used to style the first child of the input group addon */
 .input-group-addon:first-child
 {
-    border-right: 0;
+    border-right: 0; /* Removes the right border */
 }
 
+/* The .input-group-addon class is used to style the input group addon */
 .input-group-addon
 {
-    padding: 6px 12px;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1;
-    text-align: center;
-    border: 1px solid darkgrey;
-    border-radius: 4px;
+    padding: 6px 12px; /* Sets the padding */
+    font-size: 14px; /* Sets the font size */
+    font-weight: 400; /* Sets the font weight */
+    line-height: 1; /* Sets the line height */
+    text-align: center; /* Centers the text */
+    border: 1px solid darkgrey; /* Sets the border */
+    border-radius: 4px; /* Rounds the corners of the border */
 }
 
+/* The .input-group-addon .fa class is used to style the font awesome icons in the input group addon */
 .input-group-addon .fa
 {
-    font-size: 18px;
+    font-size: 18px; /* Sets the font size */
 }
 
+/* The .input-group .form-control class is used to style the form control in the input group */
 .input-group .form-control
 {
-    position:relative;
-    z-index: 2;
-    float:left;
-    margin-bottom: 0;
+    position:relative; /* Sets the position to relative */
+    z-index: 2; /* Sets the stack order */
+    float:left; /* Floats the element to the left */
+    margin-bottom: 0; /* Removes the bottom margin */
 }
 
+/* The .input-group .form-control:last-child class is used to style the last form control in the input group */
 .input-group .form-control:last-child
 {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-top-left-radius: 0; /* Removes the top left border radius */
+    border-bottom-left-radius: 0; /* Removes the bottom left border radius */
 }
 
+/* The .login class is used to style the login form */
 .login
 {
-    padding: 2rem 1rem;
-    margin-bottom: 2rem;
-    background-color: lightgrey;
-    border-radius: .3rem;
+    padding: 2rem 1rem;  /* Sets the padding */
+    margin-bottom: 2rem;  /* Sets the bottom margin */
+    background-color: lightgrey; /* Sets the background color */
+    border-radius: .3rem;  /* Rounds the corners of the border */
 }
 
+/* The .login input class is used to style the input fields in the login form */
 .login input
 {
-    background-color: white;
-    border-color: darkgrey;
-    border-radius: .4em;
-    width: 100%;
+    background-color: white; /* Sets the background color */
+    border-color: darkgrey; /* Sets the border color */
+    border-radius: .4em;  /* Rounds the corners of the border */
+    width: 100%; /* Sets the width */
+}
+
+/* The .card class is used to style the card components */
+.card
+{
+
+    border-left: 2px solid #007bff; /* Sets the left border */
+    border-top: none; /* Removes the top border */
+    border-right: none; /* Removes the right border */
+    border-bottom: none; /* Removes the bottom border */
+}
+
+/* The .card-header, .card-body classes are used to style the card header and body */
+.card-header, .card-body
+{
+    border-left: 2px solid #007bff; /* Sets the left border */
+}
+
+/* Responsive CSS */
+@media screen and (max-width: 600px)
+{
+    /* The .card class is used to style the card components on small screens */
+    .card
+    {
+        flex-direction: column; /* Stack cards vertically on small screens */
+    }
+
+    /* The .card-header, .card-body classes are used to style the card header and body on small screens */
+    .card-header, .card-body
+    {
+        width: 100%; /* Full width on small screens */
+    }
 }
