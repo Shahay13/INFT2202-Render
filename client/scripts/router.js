@@ -50,16 +50,14 @@ let router = new core.Router();
 router.AddTable([
     "/",
     "/home",
-    "/portfolio",
+    "/about",
     "/services",
-    "/team",
-    "/blog",
+    "/products",
+    "/contact",
+    "/contact-list",
     "/login",
     "/register",
-    "/contact-list",
-    "/edit",
-    "/community-posts",
-    "/edit-post"
+    "/edit"
 ]);
 let route = location.pathname;
 router.ActiveLink = (router.Find(route) > -1)
