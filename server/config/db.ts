@@ -14,5 +14,3 @@ else{
 export {URI, HostName}
 
 export const SessionSecret = "INFT2202SessionSecret";
-
-

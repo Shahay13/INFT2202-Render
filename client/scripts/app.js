@@ -18,17 +18,49 @@
             }
         });
     }
+    function AddContact(fullName, contactNumber, emailAddress) {
+        let contact = new core.Contact(fullName, contactNumber, emailAddress);
+        if (contact.serialize()) {
+            let key = contact.fullName.substring(0, 1) + Date.now();
+            localStorage.setItem(key, contact.serialize());
+        }
+    }
     function DisplayHomePage() {
         console.log("Home Page");
+        $("#AboutUsBtn").on("click", () => {
+            location.href = "/about";
+        });
+        $("main").append(`<p id="MainParagraph"
+                                class="mt-3">This is my first paragraph.</p>`);
+        $("main").append(`<article>
+                                <p id="ArticleParagraph" class="mt-3">This is my article paragraph.</p></article>`);
     }
-    function DisplayTeamPage() {
-        console.log("Team Page");
+    function DisplayAboutPage() {
+        console.log("About Us Page");
+        $("#AboutUsBtn").on("click", () => {
+            location.href = "/about";
+        });
     }
-    function DisplayBlogPage() {
-        console.log("Blog Page");
+    function DisplayContactPage() {
+        console.log("Contact Us Page");
+        $("a[data='contact-list']").off("click");
+        $("a[data='contact-list']").on("click", function () {
+            location.href = "/contact-list";
+        });
+        ContactFormValidation();
+        let sendButton = document.getElementById("sendButton");
+        let subscribeCheckbox = document.getElementById("subscribeCheckbox");
+        sendButton.addEventListener("click", function () {
+            if (subscribeCheckbox.checked) {
+                let fullName = document.forms[0].fullName.value;
+                let contactNumber = document.forms[0].contactNumber.value;
+                let emailAddress = document.forms[0].emailAddress.value;
+                AddContact(fullName, contactNumber, emailAddress);
+            }
+        });
     }
     function DisplayContactListPage() {
-        console.log("Contact-List Page");
+        console.log("Contact List Page");
         $("a.delete").on("click", function (event) {
             if (!confirm("Confirm contact Delete?")) {
                 event.preventDefault();
@@ -36,11 +68,17 @@
             }
         });
     }
-    function DisplayPortfolioPage() {
-        console.log("Portfolio Page");
+    function DisplayProductPage() {
+        console.log("Product Page");
+        $("#AboutUsBtn").on("click", () => {
+            location.href = "/about";
+        });
     }
     function DisplayServicesPage() {
         console.log("Services Page");
+        $("#AboutUsBtn").on("click", () => {
+            location.href = "/about";
+        });
     }
     function DisplayEditPage() {
         console.log("Edit Page");
@@ -56,18 +94,6 @@
     function DisplayRegisterPage() {
         console.log("Register Page");
     }
-    function DisplayCommunityPostsPage() {
-        console.log("Community Posts Page");
-        $("a.delete").on("click", function (event) {
-            if (!confirm("Confirm post Delete?")) {
-                event.preventDefault();
-                location.href = "/community-posts";
-            }
-        });
-    }
-    function DisplayEditPostPage() {
-        console.log("Edit Post Page");
-    }
     function Display404Page() {
         console.log("404 Page");
     }
@@ -78,17 +104,17 @@
             case "home":
                 DisplayHomePage();
                 break;
-            case "team":
-                DisplayTeamPage();
+            case "about":
+                DisplayAboutPage();
                 break;
-            case "blog":
-                DisplayBlogPage();
+            case "contact":
+                DisplayContactPage();
                 break;
             case "contact-list":
                 DisplayContactListPage();
                 break;
-            case "portfolio":
-                DisplayPortfolioPage();
+            case "products":
+                DisplayProductPage();
                 break;
             case "services":
                 DisplayServicesPage();
@@ -102,13 +128,6 @@
             case "edit":
             case "add":
                 DisplayEditPage();
-                break;
-            case "community-posts":
-                DisplayCommunityPostsPage();
-                break;
-            case "edit-post":
-            case "add-post":
-                DisplayEditPostPage();
                 break;
             case "404":
                 Display404Page();

@@ -5,7 +5,6 @@ import {HttpError} from "http-errors";
 import User from '../models/user';
 import {AuthGuard, UserDisplayName} from "../util/index";
 import passport from "passport";
-import Post from '../models/post';
 
 /** TOP-LEVEL ROUTES **/
 router.get('/', function(req, res, next) {
@@ -16,20 +15,24 @@ router.get('/home', function(req, res, next) {
   res.render('index', { title: 'Home', page : "home", displayName : UserDisplayName(req) });
 });
 
-router.get('/team', function(req, res, next) {
-    res.render('index', { title: 'Team', page : "team", displayName : UserDisplayName(req) });
+router.get('/about', function(req, res, next) {
+  res.render('index', { title: 'About Us', page : "about", displayName : UserDisplayName(req) });
 });
 
-router.get('/blog', function(req, res, next) {
-    res.render('index', { title: 'Blog', page : "blog", displayName : UserDisplayName(req) });
+router.get('/contact', function(req, res, next) {
+  res.render('index', { title: 'Contact Us', page : "contact", displayName : UserDisplayName(req) });
 });
 
-router.get('/portfolio', function(req, res, next) {
-    res.render('index', { title: 'Portfolio', page : "portfolio", displayName : UserDisplayName(req) });
+router.get('/products', function(req, res, next) {
+    res.render('index', { title: 'Products', page : "products", displayName : UserDisplayName(req) });
 });
 
 router.get('/services', function(req, res, next) {
     res.render('index', { title: 'Services', page : "services", displayName : UserDisplayName(req) });
+});
+
+router.get('/404', function(req, res, next) {
+    res.render('index', { title: '404', page : "404", displayName : UserDisplayName(req) });
 });
 
 /** AUTHENTICATIONS ROUTES **/
@@ -39,7 +42,7 @@ router.get('/login', function(req, res, next) {
         return res.render('index',
             {title: 'Login', page: "login", messages: req.flash('loginMessage'), displayName: UserDisplayName(req) });
     }
-    return res.redirect('/community-posts');
+    return res.redirect('/contact-list');
 });
 
 router.post('/login', function(req, res, next) {
@@ -63,7 +66,7 @@ router.post('/login', function(req, res, next) {
                 console.error(err);
                 res.end();
             }
-            res.redirect('/community-posts');
+            res.redirect('/contact-list');
         });
 
     })(req, res, next);     // IIFE.
@@ -75,7 +78,7 @@ router.get('/register', function(req, res, next) {
         res.render('index',
             {title: 'Register', page: "register", messages: req.flash('registerMessage'), displayName: UserDisplayName(req) });
     }
-    return res.redirect('/community-posts');
+    return res.redirect('/contact-list');
 });
 
 router.post('/register', function(req, res, next) {
@@ -105,7 +108,7 @@ router.post('/register', function(req, res, next) {
         } else {
 
             return passport.authenticate('local')(req, res, function () {
-                return res.redirect('/community-posts');
+                return res.redirect('/contact-list');
             });
         }
 
@@ -205,92 +208,6 @@ router.post('/add', AuthGuard, function(req, res, next){
     console.error(err);
     res.end(err);
   });
-
-});
-
-/** COMMUNITY POST ROUTES **/
-router.get('/community-posts', AuthGuard, function(req, res, next) {
-
-    Post.find().then(function(data : any){
-        //console.log(data);
-        res.render('index', { title: 'Community Posts', page: "community-posts", posts : data, displayName: UserDisplayName(req) });
-
-    }).catch(function(err : HttpError){
-        console.error("Encountered an Error reading posts from the Database: " + err);
-        res.end();
-    });
-
-});
-
-router.get('/edit-post/:id', AuthGuard, function(req, res, next) {
-
-    let id = req.params.id;
-
-    Post.findById(id).then(function(postToEdit){
-
-        res.render('index', { title: 'Edit Post', page: "edit-post", post: postToEdit, displayName: UserDisplayName(req) });
-
-    }).catch(function(err){
-        console.error(err);
-        res.end();
-    });
-
-});
-
-router.get('/add-post', AuthGuard, function(req, res, next) {
-    res.render('index', { title: 'Add Post', page: "edit-post", post: '', displayName: UserDisplayName(req) });
-});
-
-router.get('/delete-post/:id', AuthGuard, function(req, res, next) {
-
-    let id = req.params.id;
-
-    Post.deleteOne({_id: id}).then(function(){
-        res.redirect('/community-posts');
-    }).catch(function(err){
-        console.error(err);
-        res.end(err);
-    });
-
-});
-
-router.post('/edit-post/:id', AuthGuard, function(req, res, next){
-
-    let id = req.params.id;
-
-    let updatedPost = new Post (
-        {
-            "_id": id,
-            "PostTitle" : req.body.postTitle,
-            "PostUser": req.body.postUser,
-            "PostComment": req.body.postComment
-        }
-    );
-
-    Post.updateOne( {_id: id}, updatedPost).then(function(){
-        res.redirect('/community-posts');
-    }).catch(function(err) {
-        console.error(err);
-        res.end(err);
-    });
-});
-
-router.post('/add-post', AuthGuard, function(req, res, next){
-
-    let newPost = new Post (
-        {
-            "PostTitle" : req.body.postTitle,
-            "PostUser": req.body.postUser,
-            "PostComment": req.body.postComment
-        }
-    );
-
-    Post.create(newPost).then(function(){
-        res.redirect('/community-posts');
-    }).catch(function(err) {
-        console.error(err);
-        res.end(err);
-    });
 
 });
 
